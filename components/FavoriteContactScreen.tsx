@@ -40,23 +40,19 @@ return (
               {'LandLIne No.:' + item.landaLine}
             </Text>
             </View>
-            
-        
         )}
       }/>
   </View>
 )
 };
 const styles=StyleSheet.create({
-    addImg:
+  addImg:
   {
     width:80,
     height:80,
     bottom:10,
     top:70,
-    left:280,
-    backgroundColor:'red',
-
+    left:280
   }
 })
 export default Favorite_contact_list_screen;
