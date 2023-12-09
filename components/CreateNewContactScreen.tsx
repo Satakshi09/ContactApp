@@ -1,23 +1,23 @@
-import {useEffect, useState} from 'react';
-import {Button, Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import {StyleSheet} from 'react-native';
-import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
-import {launchImageLibrary} from 'react-native-image-picker';
-import {openDatabase} from 'react-native-sqlite-storage';
+import { useEffect, useState } from 'react';
+import { Button, Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Colors, Header } from 'react-native/Libraries/NewAppScreen';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { openDatabase } from 'react-native-sqlite-storage';
 const Create_new_contact_screen = (props: any) => {
   let [name, setName] = useState('');
   let [mobNumber, setMobNumber] = useState('');
   let [landaLine, setLandLine] = useState('');
   let [imageSource, setImageSource] = useState('https://www.shutterstock.com/image-vector/man-icon-vector-600w-1040084344.jpg');
-  let [favorite,setFavorite]=useState(0);
-  let db=openDatabase({name:'UserDatabase5.db'});
+  let [favorite, setFavorite] = useState(0);
+  let db = openDatabase({ name: 'UserDatabase5.db' });
 
   useEffect(() => {
-    db.transaction( (txn)=> {
+    db.transaction((txn) => {
       txn.executeSql(
         "SELECT name FROM sqlite_master WHERE type='table' AND name='table_user'",
         [],
-         (tx, res)=> {
+        (tx, res) => {
           console.log('item:', res.rows.length);
           if (res.rows.length == 0) {
             txn.executeSql('DROP TABLE IF EXISTS table_user', []);
@@ -26,7 +26,7 @@ const Create_new_contact_screen = (props: any) => {
               []
             );
           }
-          else{
+          else {
             console.log("already Created Table");
           }
         },
@@ -34,23 +34,23 @@ const Create_new_contact_screen = (props: any) => {
     });
   }, []);
 
-  const saveData=()=>{
-    db.transaction( (tx)=>{
+  const saveData = () => {
+    db.transaction((tx) => {
       tx.executeSql(
         'INSERT INTO table_user(name, mobNumber,landaLine, imageSource,favorite) VALUES (?,?,?,?,?)',
-        [name,mobNumber,landaLine,imageSource,favorite] ,
-        (tx,res)=>{
+        [name, mobNumber, landaLine, imageSource, favorite],
+        (tx, res) => {
           console.log(res.rowsAffected);
-          if(res.rowsAffected==1){
+          if (res.rowsAffected == 1) {
             console.log(res);
             props.navigation.goBack();
           }
-          else{
-            console.log("save data ka else"+res);
+          else {
+            console.log("save data ka else" + res);
           }
         },
-        (error)=>{
-          console.log("save data ka error "+error);
+        (error) => {
+          console.log("save data ka error " + error);
         }
       );
     }
@@ -58,9 +58,9 @@ const Create_new_contact_screen = (props: any) => {
   }
 
   const selectImage = () => {
-    launchImageLibrary({mediaType: 'photo'},response => {
+    launchImageLibrary({ mediaType: 'photo' }, response => {
       if (!response.didCancel && !response.errorCode) {
-        console.log("image ::"+response.assets[0].uri);
+        console.log("image ::" + response.assets[0].uri);
 
         setImageSource(response.assets[0].uri);
       }
@@ -77,6 +77,7 @@ const Create_new_contact_screen = (props: any) => {
           fontWeight: '600',
           left: 100,
           top: 5,
+
         }}>
         New Contact
       </Text>
@@ -97,30 +98,42 @@ const Create_new_contact_screen = (props: any) => {
         onChangeText={text => setLandLine(text)}
         keyboardType="numeric"
         value={landaLine}></TextInput>
-    <TouchableOpacity onPress={selectImage}>
-    <Image source={{ uri: imageSource }} style={styles.addImg} />
-    </TouchableOpacity>
+      <TouchableOpacity onPress={selectImage}>
+        <Image source={{ uri: imageSource }} style={styles.addImg} />
+      </TouchableOpacity>
       <View style={styles.addButton}>
         <TouchableOpacity
-          onPress={() =>props.navigation.navigate('ContactList')}>
-          <Text style={{fontSize: 20,fontWeight:'bold',color:'black'}}> Done </Text>
+          onPress={() => props.navigation.navigate('ContactList')}>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'black', backgroundColor: '#5da3a0' }}> Done </Text>
         </TouchableOpacity>
       </View>
-      <View style={{top:200}}>
-      <Button title='Save Data' onPress={()=>saveData()}></Button>
+
+      <View style={styles.saveData}>
+        <TouchableOpacity
+          style={{  backgroundColor: '#07524e',
+          padding: 12,
+          marginTop: 10, 
+          alignItems:'center' }}
+          onPress={() => saveData()}
+        >
+          <Text style={{ color: 'black', fontWeight: 'bold' }}>Save Data</Text>
+        </TouchableOpacity>
       </View>
+
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  saveData: {
+    top: 200,
+  },
   textInput: {
     top: 250,
-    fontSize: 20,
-    color: 'maroon',
+    fontSize: 16,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: 'blak',
     margin: 4,
     padding: 5,
     backgroundColor: 'white',
@@ -128,7 +141,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 18,
-    backgroundColor:'#5da3a0'
+    backgroundColor: '#5da3a0'
   },
   addButton: {
     position: 'absolute',
@@ -137,10 +150,11 @@ const styles = StyleSheet.create({
     width: 60,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'floralwhite',
+    backgroundColor: '#5da3a0',
+
   },
   addText: {
-    fontSize: 30,
+    fontSize: 50,
     position: 'absolute',
     top: 80,
     right: 200,
@@ -148,17 +162,18 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     backgroundColor: 'red',
+    fontWeight: 'bold'
   },
   addImg:
   {
-    width:80,
-    height:80,
-    bottom:10,
-    top:10,
-    left:130,
-    backgroundColor:'skyblue',
-
+    width: 80,
+    height: 80,
+    bottom: 10,
+    top: 10,
+    left: 130,
+    backgroundColor: 'yellow',
   }
+
 });
 
 export default Create_new_contact_screen;
