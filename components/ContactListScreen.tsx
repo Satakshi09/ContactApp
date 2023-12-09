@@ -104,13 +104,18 @@ const Contact_list_screen = (props: any) => {
               <Text style={{ fontWeight: '600' }}>
                 {'LandLIne No.:' + item.landaLine}
               </Text>
-              <View>
-                <Button
-                  title='Add to fav'
-                  onPress={() => favList(item.user_id)}
-                ></Button>
-              </View>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#1ba8a1',
+                  padding: 12,
+                  marginTop: 10, 
+                  alignItems:'center'
 
+                }}
+                onPress={() => favList(item.user_id)}
+              >
+                <Text style={{ color: 'black', fontWeight: 'bold'}}>ADD TO FAV</Text>
+              </TouchableOpacity>
             </TouchableOpacity>
           );
         }}
@@ -130,13 +135,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#5da3a0'
   },
+ 
   userItem: {
     paddingBottom: 20,
     marginBottom: 30,
     top: 30,
     backgroundColor: '#1e615e',
-    margin: 10,
-    backgroundcolor: 'blue',
+    margin: 10, 
   },
   addIcon: {
     color: 'red',
